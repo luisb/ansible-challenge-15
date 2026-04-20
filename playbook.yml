@@ -1,0 +1,17 @@
+---
+- name: Deploy index.html
+  hosts: webservers
+  become: true
+  tasks:
+    - name: Deploy index.html.j2 to /var/www/html/index.html
+      ansible.builtin.template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+        mode: '0644'
+      notify: restart httpd
+
+  handlers:
+    - name: restart httpd
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
